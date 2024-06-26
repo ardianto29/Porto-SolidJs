@@ -2,6 +2,7 @@ import type { Component } from "solid-js";
 import { Header } from "../components/Header";
 import About from "./About";
 import Portfolios from "./Portofolio";
+import { Skills } from "./Skills";
 
 const App: Component = () => {
   return (
@@ -9,6 +10,7 @@ const App: Component = () => {
       <Header />
       <About />
       <Portfolios />
+      <Skills/>
     </main>
   );
 };

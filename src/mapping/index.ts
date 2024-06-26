@@ -8,7 +8,7 @@ export const portfolios = [
     image: imagePorto1,
     title: "Discord Bot Website (Front-end)",
     link: "https://flantic.vercel.app/",
-    tags: ["Nextjs", "React", "Tailwindcss", "Framer Motion"],
+    tags: ["Nextjs", "React","Typescript", "Tailwindcss", "Framer Motion"],
     description: "Create a new look for the discord bot website",
   },
   {
@@ -23,7 +23,7 @@ export const portfolios = [
     image: imagePorto3,
     title: "Apple Web Clone (Front-end)",
     link: "https://apple-clone-vite-six.vercel.app/",
-    tags: ["ReactJs", "Tailwindcss", "Vite", "ThreeJS"],
+    tags: ["ReactJs","Javascript", "Tailwindcss", "Vite", "ThreeJS"],
     description:
       " This website is a clone of the Apple website, and I followed the tutorial from Youtube",
   },
@@ -36,3 +36,26 @@ export const portfolios = [
       "Aplikasi ini untuk menyimpan buku dibangun dengan memanfaatkan Browser Object Model (BOM), Document Object Model (DOM), dan Event. Untuk Mencegah data tidak hilang dari aplikasi maka dimanfaatkan fungsi web storage dari web client agar aplikasi berjalan optimal.",
   },
 ];
+
+ export const educationData = [
+  {
+    title: 'SMK Muhammadiyah 1 Padang',
+    subtitle: 'Rekayasa Perangkat Lunak',
+    years: '2017 - 2020',
+  },
+  {
+    title: 'PLN',
+    subtitle: 'PLN officer',
+    years: '2020 - 2021',
+  },
+  {
+    title: 'BLKPP DIY',
+    subtitle: 'Embedded System',
+    years: 'Jan 2023 - Maret 2023',
+  },
+  {
+    title: 'CodemasterID',
+    subtitle: 'Junior Mobile React Native',
+    years: 'April 2023 - Agus 2023',
+  },
+ ]

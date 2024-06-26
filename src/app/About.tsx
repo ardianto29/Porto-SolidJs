@@ -4,9 +4,9 @@ function About() {
   return (
     <section class="w-screen h-auto justify-center bg-backgroundColors-secondary">
       <div class="container px-4 py-12 md:px-24 md:py-24 w-full">
-        <div class="flex items-center justify-center mb-2">
-          <div class="w-5 h-px bg-gray-400 mr-2 md:mr-4"></div>
-          <h3 class="font-normal tracking-wider text-textColors-secondary uppercase p-3">
+        <div class="flex items-center justify-center">
+          <div class="w-5 h-px bg-gray-400 mr-2 md:mr-3"></div>
+          <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
             Intro
           </h3>
         </div>

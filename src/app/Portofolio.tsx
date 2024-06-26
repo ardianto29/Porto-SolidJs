@@ -3,9 +3,9 @@ import { For } from "solid-js";
 
 export default function Portfolios() {
   return (
-    <section class="container mx-auto">
-      <div class="flex items-center justify-start pt-24 ">
-        <div class="w-5 h-px text-textColors-secondary mr-2 md:mr-4"></div>
+    <section class="container mx-auto p-7">
+      <div class="flex items-center justify-start pt-10">
+        <div class="w-7 h-px bg-textColors-secondary mr-2 md:mr-4"></div>
         <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
           My Works
         </h3>
@@ -27,7 +27,7 @@ export default function Portfolios() {
               </div>
               <div class="p-5">
                 <div class="flex justify-between items-center">
-                  <h4 class="font-medium text-base text-textColors-primary ml-5">
+                  <h4 class="font-medium text-base text-textColors-primary ">
                     {portfolio.title}
                   </h4>
                   <a
