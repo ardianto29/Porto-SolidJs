@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Roboto";
+    src: url(/font/Roboto-Regular.ttf) format("ttf");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+  }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
