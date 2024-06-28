@@ -1,6 +1,4 @@
-import { createSignal } from "solid-js";
-
-function About() {
+export function About() {
   return (
     <section class="w-screen h-auto justify-center bg-backgroundColors-secondary">
       <div class="container px-4 py-12 md:px-24 md:py-24 w-full">
@@ -29,5 +27,3 @@ function About() {
     </section>
   );
 }
-
-export default About;

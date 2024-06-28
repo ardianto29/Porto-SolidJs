@@ -1,6 +1,6 @@
 import type { Component } from "solid-js";
 import { Header } from "../components/Header";
-import About from "./About";
+import { About } from "./About";
 import Portfolios from "./Portofolio";
 import Skills from "./Skills";
 
