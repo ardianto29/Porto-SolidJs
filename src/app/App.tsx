@@ -3,14 +3,18 @@ import { Header } from "../components/Header";
 import { About } from "./About";
 import Portfolios from "./Portofolio";
 import Skills from "./Skills";
+import { Contact } from "./Contact";
 
 const App: Component = () => {
   return (
-    <main class="container flex flex-col items-center w-full max-w-screen-xl mx-auto px-4">
-      <Header />
-      <About />
-      <Portfolios />
-      <Skills />
+    <main class="w-full overflow-hidden">
+      <div class="container mx-auto flex flex-col items-center">
+        <Header />
+        <About />
+        <Portfolios />
+        <Skills />
+        <Contact />
+      </div>
     </main>
   );
 };

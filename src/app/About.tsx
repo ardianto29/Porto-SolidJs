@@ -13,7 +13,7 @@ export function About() {
         </h1>
 
         <article class="flex justify-center mt-6">
-          <div class="bg-white text-gray-700 rounded-xl px-6 py-8 md:px-10 md:py-12 text-center shadow-lg">
+          <div class="bg-white text-gray-700 rounded-xl px-6 py-8 md:px-10 md:py-12 text-center text-pretty shadow-lg">
             <p>
               I am a Website developer. Previously, I worked at PT PLN as an
               officer recording electricity meters for 1 year. Now, I am
