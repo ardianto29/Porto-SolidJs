@@ -8,7 +8,7 @@ export const portfolios = [
     image: imagePorto1,
     title: "Discord Bot Website (Front-end)",
     link: "https://flantic.vercel.app/",
-    tags: ["Nextjs", "React","Typescript", "Tailwindcss", "Framer Motion"],
+    tags: ["Nextjs", "React", "Typescript", "Tailwindcss", "Framer Motion"],
     description: "Create a new look for the discord bot website",
   },
   {
@@ -23,7 +23,7 @@ export const portfolios = [
     image: imagePorto3,
     title: "Apple Web Clone (Front-end)",
     link: "https://apple-clone-vite-six.vercel.app/",
-    tags: ["ReactJs","Javascript", "Tailwindcss", "Vite", "ThreeJS"],
+    tags: ["ReactJs", "Javascript", "Tailwindcss", "Vite", "ThreeJS"],
     description:
       " This website is a clone of the Apple website, and I followed the tutorial from Youtube",
   },
@@ -37,25 +37,36 @@ export const portfolios = [
   },
 ];
 
- export const educationData = [
+export const educationData = [
   {
-    title: 'SMK Muhammadiyah 1 Padang',
-    subtitle: 'Rekayasa Perangkat Lunak',
-    years: '2017 - 2020',
+    title: "Dicoding",
+    subtitle: "Belajar Pemrograman Web dan Javascript",
+    years: "Mei 2024 - Juni 2024",
   },
   {
-    title: 'PLN',
-    subtitle: 'PLN officer',
-    years: '2020 - 2021',
+    title: "Tako.id",
+    subtitle: "Front-end Developer",
+    years: "Agustus 2023 - Present",
+  },
+
+  {
+    title: "CodemasterID",
+    subtitle: "Junior Mobile React Native",
+    years: "April 2023 - Agustus 2023",
   },
   {
-    title: 'BLKPP DIY',
-    subtitle: 'Embedded System',
-    years: 'Jan 2023 - Maret 2023',
+    title: "BLKPP DIY",
+    subtitle: "Embedded System",
+    years: "Jan 2023 - Maret 2023",
   },
   {
-    title: 'CodemasterID',
-    subtitle: 'Junior Mobile React Native',
-    years: 'April 2023 - Agus 2023',
+    title: "PLN",
+    subtitle: "PLN officer",
+    years: "2020 - 2021",
   },
- ]
+  {
+    title: "SMK Muhammadiyah 1 Padang",
+    subtitle: "Rekayasa Perangkat Lunak",
+    years: "2017 - 2020",
+  },
+];
