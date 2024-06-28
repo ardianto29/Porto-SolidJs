@@ -3,7 +3,7 @@ import { educationData } from "../mapping";
 export function Skills() {
   return (
     <section class="w-screen h-auto bg-backgroundColors-secondary ">
-      <div class="container px-4 py-12 md:px-10 md:py-20 w-full">
+      <div class="container px-10 py-12 md:px-10 md:py-20 w-full">
         <div class="flex items-center justify-start">
           <div class="w-5 h-px bg-gray-400 mr-2 md:mr-3"></div>
           <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
@@ -14,7 +14,7 @@ export function Skills() {
           Experience & Education
         </h1>
 
-        <div class="mt-16 grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-12">
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-12">
           <div>
             {educationData.map((edu, index) => (
               <section class="flex gap-2 ">
