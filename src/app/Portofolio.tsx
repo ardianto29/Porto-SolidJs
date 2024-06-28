@@ -1,7 +1,7 @@
 import { portfolios } from "../mapping/index";
 import { For } from "solid-js";
 
-export default function Portfolios() {
+export function Portfolios() {
   return (
     <section class="container mx-auto p-7">
       <div class="flex items-center justify-start pt-10">
@@ -16,7 +16,7 @@ export default function Portfolios() {
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
         <For each={portfolios}>
-          {(portfolio, _) => (
+          {(portfolio) => (
             <div class="relative rounded-xl overflow-hidden border border-solid border-borderColors mt-14 shadow-lg">
               <div class="h-[250px] relative overflow-hidden">
                 <img
@@ -27,7 +27,7 @@ export default function Portfolios() {
               </div>
               <div class="p-5">
                 <div class="flex justify-between items-center">
-                  <h4 class="font-medium text-base text-textColors-primary ">
+                  <h4 class="font-medium text-base text-textColors-primary">
                     {portfolio.title}
                   </h4>
                   <a
@@ -45,7 +45,7 @@ export default function Portfolios() {
                 </div>
                 <div class="flex flex-wrap gap-4 mt-8">
                   <For each={portfolio.tags}>
-                    {(tag, _) => (
+                    {(tag) => (
                       <div class="text-sm border border-solid border-gray-300 px-4 py-2 text-secondary max-w-full">
                         {tag}
                       </div>
