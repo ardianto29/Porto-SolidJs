@@ -3,7 +3,7 @@ import { For } from "solid-js";
 
 export function Portfolios() {
   return (
-    <section class="container mx-auto p-7">
+    <section id="portfolio" class="container mx-auto p-7">
       <div class="flex items-center justify-start pt-10">
         <div class="w-7 h-px bg-textColors-secondary mr-2 md:mr-4"></div>
         <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">

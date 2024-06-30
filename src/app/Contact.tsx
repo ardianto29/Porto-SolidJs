@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 
 export function Contact(): JSX.Element {
   return (
-    <section class="container mx-auto p-7">
+    <section id="contact" class="container mx-auto p-7">
       <div class="grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-32 mt-10">
         <form
           action="https://formspree.io/f/xeqwdykj"

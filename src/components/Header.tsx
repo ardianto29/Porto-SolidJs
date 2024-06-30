@@ -22,7 +22,9 @@ export function Header() {
           <HamburgerMenu navActive={navActive()} toggleNav={toggleNav} />
         </div>
 
-        <section class="flex flex-col-reverse md:grid md:grid-cols-2 items-center h-auto md:h-[720px] p-4 md:p-0">
+        <section
+          id="hero"
+          class="flex flex-col-reverse md:grid md:grid-cols-2 items-center h-auto md:h-[720px] p-4 md:p-0">
           <div class="text-center md:text-left mb-6 md:mb-0">
             <div class="flex items-center justify-center md:justify-start mb-4">
               <div class="w-7 h-px bg-gray-400 mr-2"></div>

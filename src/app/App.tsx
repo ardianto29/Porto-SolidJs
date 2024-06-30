@@ -11,10 +11,18 @@ const App: Component = () => {
     <main class="w-full overflow-hidden">
       <div class="container mx-auto flex flex-col items-center">
         <Header />
-        <About />
-        <Portfolios />
-        <Skills />
-        <Contact />
+        <section id="about">
+          <About />
+        </section>
+        <section id="portfolios">
+          <Portfolios />
+        </section>
+        <section id="skills">
+          <Skills />
+        </section>
+        <section id="contact">
+          <Contact />
+        </section>
         <Footer />
       </div>
     </main>

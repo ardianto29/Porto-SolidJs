@@ -2,7 +2,7 @@ import { educationData } from "../mapping";
 
 export function Skills() {
   return (
-    <section class="w-screen h-auto bg-backgroundColors-secondary ">
+    <section id="skills" class="w-screen h-auto bg-backgroundColors-secondary ">
       <div class="container px-10 py-12 md:px-10 md:py-20 w-full">
         <div class="flex items-center justify-start">
           <div class="w-5 h-px bg-gray-400 mr-2 md:mr-3"></div>
