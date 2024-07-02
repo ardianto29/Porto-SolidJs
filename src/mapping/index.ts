@@ -3,6 +3,29 @@ import imagePorto2 from "../assets/images/screencapture-tako-id-2024-06-25-19_41
 import imagePorto3 from "../assets/images/screencapture-apple-clone-vite-six-vercel-app-2024-06-05-20_28_25.png";
 import imagePorto4 from "../assets/images/screencapture-bookappme-vercel-app-2024-06-25-02_38_51.png";
 
+export const menu = [
+  {
+    name: "Home",
+    hash: "#hero",
+  },
+  {
+    name: "About",
+    hash: "#about",
+  },
+  {
+    name: "Portfolio",
+    hash: "#portfolio",
+  },
+  {
+    name: "Skills",
+    hash: "#skills",
+  },
+  {
+    name: "Contact",
+    hash: "#contact",
+  },
+];
+
 export const portfolios = [
   {
     image: imagePorto1,
