@@ -25,13 +25,20 @@ export function NavMenu(props: NavMenuProps) {
       } transition-transform duration-200 ease-in-out z-50 lg:relative lg:h-auto lg:w-auto lg:flex lg:items-center lg:justify-center lg:border-none`}>
       <ul
         class="flex flex-col h-full justify-center space-y-8 text-center lg:flex-row lg:space-y-0 lg:space-x-12 -ml-9"
-        data-aos={props.navActive ? "fade-left" : "fade-down"}>
+        data-aos={props.navActive ? "fade-left" : "fade-down"}
+        data-aos-duration={props.navActive ? "800" : ""}>
         {menu.map((item) => (
           <li>
             <a
-              href={item.hash} // Gunakan properti hash dari menu untuk href
-              onclick={() => scrollTo(item.hash)} // Panggil fungsi scrollTo dengan hash yang sesuai
-              class="text-gray-800 relative group">
+              href={item.hash}
+              onclick={() => {
+                scrollTo(item.hash);
+                if (props.navActive) {
+                  AOS.refresh();
+                }
+              }}
+              class="text-gray-800 relative group"
+              data-aos={props.navActive ? "fade-left" : ""}>
               <span>{item.name}</span>
               <span class="absolute inset-x-0 bottom-0 h-0.5 bg-iconColors-hover transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
             </a>
