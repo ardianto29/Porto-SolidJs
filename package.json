@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "solid-devtools": "^0.29.2",
@@ -20,8 +21,11 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
+    "aos": "^2.3.4",
     "lenis": "^1.1.5",
     "solid-icons": "^1.1.0",
-    "solid-js": "^1.8.11"
+    "solid-js": "^1.8.11",
+    "solid-motionone": "^1.0.0",
+    "solid-transition-group": "^0.2.3"
   }
 }

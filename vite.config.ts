@@ -1,5 +1,6 @@
-import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
+import Aos from "aos";
+import { defineConfig } from "vite";
+import solidPlugin from "vite-plugin-solid";
 // import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
@@ -11,10 +12,15 @@ export default defineConfig({
     // devtools(),
     solidPlugin(),
   ],
+  resolve: {
+    alias: {
+      Aos: "aos/dist/aos.js",
+    },
+  },
   server: {
     port: 3000,
   },
   build: {
-    target: 'esnext',
+    target: "esnext",
   },
 });
