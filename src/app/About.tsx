@@ -1,9 +1,22 @@
+import { onMount, onCleanup } from "solid-js";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+onMount(() => {
+  AOS.init({
+    once: false,
+    easing: "ease",
+  });
+});
+
 export function About() {
   return (
     <section
       id="about"
       class="w-screen h-auto justify-center bg-backgroundColors-secondary">
-      <div class="container px-4 py-12 md:px-24 md:py-24 w-full">
+      <div
+        class="container px-4 py-12 md:px-24 md:py-24 w-full"
+        data-aos="zoom-in">
         <div class="flex items-center justify-center">
           <div class="w-5 h-px bg-gray-400 mr-2 md:mr-3"></div>
           <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
@@ -14,7 +27,7 @@ export function About() {
           About Me
         </h1>
 
-        <article class="flex justify-center mt-6">
+        <article class="flex justify-center mt-6" data-aos="zoom-in">
           <div class="bg-white text-gray-700 rounded-xl px-6 py-8 md:px-10 md:py-12 text-center text-pretty shadow-lg">
             <p>
               I am a Website developer. Previously, I worked at PT PLN as an
