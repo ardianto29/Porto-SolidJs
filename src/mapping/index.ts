@@ -2,6 +2,7 @@ import imagePorto1 from "../assets/images/screencapture-localhost-3000-2024-06-0
 import imagePorto2 from "../assets/images/screencapture-tako-id-2024-06-25-19_41_33.png";
 import imagePorto3 from "../assets/images/screencapture-apple-clone-vite-six-vercel-app-2024-06-05-20_28_25.png";
 import imagePorto4 from "../assets/images/screencapture-bookappme-vercel-app-2024-06-25-02_38_51.png";
+import imagePorto5 from "../assets/images/screencapture-localhost-3000-2024-07-05-09_16_17.png";
 
 export const menu = [
   {
@@ -52,11 +53,18 @@ export const portfolios = [
   },
   {
     image: imagePorto4,
-    title: "Aplikasi Web Sederhana untuk mengelola data Buku",
+    title: "Aplikasi Web Sederhana mengelola data Buku",
     link: "https://bookappme.vercel.app/",
     tags: ["HTML", "CSS", "Javascript"],
     description:
       "Aplikasi ini untuk menyimpan buku dibangun dengan memanfaatkan Browser Object Model (BOM), Document Object Model (DOM), dan Event. Untuk Mencegah data tidak hilang dari aplikasi maka dimanfaatkan fungsi web storage dari web client agar aplikasi berjalan optimal.",
+  },
+  {
+    image: imagePorto5,
+    title: "Portfolio Website with Solidjs (Front-end)",
+    link: "https://porto-solid-js.vercel.app",
+    tags: ["SolidJs", "Typescript", "Tailwindcss", "Framer Motion"],
+    description: "Personal Website",
   },
 ];
 
