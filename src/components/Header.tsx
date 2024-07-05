@@ -1,7 +1,8 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { HamburgerMenu } from "./HamburgerMenu";
 import { NavMenu } from "./NavMenu";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 import imageHero from "../assets/images/hero.svg";
 
 export function Header() {
@@ -10,6 +11,12 @@ export function Header() {
   const toggleNav = () => {
     setNavActive(!navActive());
   };
+
+  onMount(() => {
+    AOS.init({
+      once: true,
+    });
+  });
 
   return (
     <header class="bg-white">
@@ -24,7 +31,8 @@ export function Header() {
 
         <section
           id="hero"
-          class="flex flex-col-reverse lg:grid lg:grid-cols-2 items-center h-auto lg:h-[720px] p-4 lg:p-0">
+          class="flex flex-col-reverse lg:grid lg:grid-cols-2 items-center h-auto lg:h-[720px] p-4 lg:p-0"
+          data-aos="zoom-in">
           <div class="text-center lg:text-left mb-6 lg:mb-0">
             <div class="flex items-center justify-center lg:justify-start mb-4">
               <div class="w-7 h-px bg-gray-400 mr-2"></div>
