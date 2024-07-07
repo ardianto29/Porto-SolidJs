@@ -1,25 +1,43 @@
+import { onMount } from "solid-js";
 import { educationData } from "../mapping";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+onMount(() => {
+  AOS.init({
+    once: false,
+  });
+});
 
 export function Skills() {
   return (
     <section id="skills" class="w-screen h-auto bg-backgroundColors-secondary ">
       <div class="container px-10 py-12 md:px-10 md:py-20 w-full">
-        <div class="flex items-center justify-start">
+        <div
+          class="flex items-center justify-start"
+          data-aos="fade-right"
+          data-aos-once="false">
           <div class="w-5 h-px bg-gray-400 mr-2 md:mr-3"></div>
           <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
             Learning Path
           </h3>
         </div>
-        <h1 class="text-3xl font-bold text-start text-textColors-primary mt-2">
+        <h1
+          class="text-3xl font-bold text-start text-textColors-primary mt-2"
+          data-aos="fade-right"
+          data-aos-once="false">
           Experience & Education
         </h1>
 
         <div class="mt-12 grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-12">
           <div>
             {educationData.map((edu, index) => (
-              <section class="flex gap-2 ">
+              <section
+                class="flex gap-2"
+                data-aos="fade-right"
+                data-aos-once="false">
                 <div class="relative pt-0 pr-[1rem]">
-                  <div class="w-[2px] h-32 bg-borderColors relative"> </div>
+                  <div class="w-[2px] h-32 bg-borderColors relative"></div>
                   <div class="absolute top-0 left-[-5px] w-3 h-3 bg-borderColors rounded-full"></div>
                 </div>
                 <div>
@@ -34,7 +52,10 @@ export function Skills() {
               </section>
             ))}
           </div>
-          <article class="font-normal text-base leading-7 text-textColors-secondary self-start">
+          <article
+            class="font-normal text-base leading-7 text-textColors-secondary self-start"
+            data-aos="zoom-in"
+            data-aos-once="false">
             <p>
               For 1+ years, I have been continuously learning in the field of
               front-end and experimenting with new technologies and frameworks,
