@@ -1,7 +1,9 @@
-import { JSX, createSignal } from "solid-js";
+import { JSX, createSignal, onMount } from "solid-js";
 import { Button } from "../components/Button";
 import { NotificationPopup } from "../components/NotificationPopup";
 import { handleFormUtils } from "../utils/formUtils";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export function Contact(): JSX.Element {
   const [showPopup, setShowPopup] = createSignal(false);
@@ -11,6 +13,12 @@ export function Contact(): JSX.Element {
     handleFormUtils(event, setNotification, setShowPopup);
   };
 
+  onMount(() => {
+    AOS.init({
+      once: false,
+    });
+  });
+
   return (
     <section id="contact" class="container mx-auto p-7">
       <div class="grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-32 mt-10">
@@ -18,7 +26,9 @@ export function Contact(): JSX.Element {
           action="https://formspree.io/f/xqazkojo"
           method="post"
           class="space-y-6"
-          onSubmit={handleSubmitForm}>
+          onSubmit={handleSubmitForm}
+          data-aos="zoom-in-right"
+          data-aos-once="false">
           <input
             type="text"
             placeholder="Name"
@@ -49,7 +59,10 @@ export function Contact(): JSX.Element {
         </form>
 
         <div class="flex flex-col gap-6 space-y-10">
-          <div class="flex items-center space-x-7">
+          <div
+            class="flex items-center space-x-7"
+            data-aos="fade-left"
+            data-aos-once="false">
             <div class="bg-backgroundColors-third w-14 h-14 rounded-xl flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +81,10 @@ export function Contact(): JSX.Element {
             </div>
           </div>
 
-          <div class="flex items-center space-x-7">
+          <div
+            class="flex items-center space-x-7"
+            data-aos="fade-left"
+            data-aos-once="false">
             <div class="bg-backgroundColors-third w-14 h-14 rounded-xl flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
