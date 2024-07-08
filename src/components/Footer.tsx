@@ -1,12 +1,23 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export function Footer() {
   const [linkedinFill, setLinkedinFill] = createSignal("#3e3f40");
   const [githubFill, setGithubFill] = createSignal("#3e3f40");
   const [gitlabFill, setGitlabFill] = createSignal("#3e3f40");
 
+  onMount(() => {
+    AOS.init({
+      once: false,
+    });
+  });
+
   return (
-    <footer class="w-screen h-auto bg-backgroundColors-secondary text-center justify-center">
+    <footer
+      class="w-screen h-auto bg-backgroundColors-secondary text-center justify-center"
+      data-aos="fade-up"
+      data-aos-once="false">
       <div class="container p-16">
         <div class="flex justify-center mb-4">
           <a
