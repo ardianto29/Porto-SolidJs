@@ -62,7 +62,7 @@ export const portfolios = [
   {
     image: imagePorto5,
     title: "Portfolio Website with Solidjs (Front-end)",
-    link: "https://porto-solid-js.vercel.app",
+    link: "https://my-porto-solid-js.vercel.app/",
     tags: ["SolidJs", "Typescript", "Tailwindcss", "Framer Motion"],
     description: "Personal Website",
   },
