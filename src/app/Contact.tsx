@@ -1,24 +1,37 @@
-import { JSX } from "solid-js";
+import { JSX, createSignal } from "solid-js";
 import { Button } from "../components/Button";
+import { NotificationPopup } from "../components/NotificationPopup";
+import { handleFormUtils } from "../utils/formUtils";
 
 export function Contact(): JSX.Element {
+  const [showPopup, setShowPopup] = createSignal(false);
+  const [notification, setNotification] = createSignal<string>("");
+
+  const handleSubmitForm = (event: Event) => {
+    handleFormUtils(event, setNotification, setShowPopup);
+  };
+
   return (
     <section id="contact" class="container mx-auto p-7">
       <div class="grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-32 mt-10">
         <form
-          action="https://formspree.io/f/xeqwdykj"
+          action="https://formspree.io/f/xqazkojo"
           method="post"
-          class="space-y-6">
+          class="space-y-6"
+          onSubmit={handleSubmitForm}>
           <input
             type="text"
             placeholder="Name"
             name="name"
+            required
             class="w-full p-3 bg-gray-100 border border-gray-300 rounded-md resize-none placeholder-gray-500 focus:outline-none focus:border-gray-400"
           />
+
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             name="email"
+            required
             class="w-full p-3 bg-gray-100 border border-gray-300 rounded-md resize-none placeholder-gray-500 focus:outline-none focus:border-gray-400"
           />
           <textarea
@@ -27,8 +40,12 @@ export function Contact(): JSX.Element {
             cols="30"
             rows="10"
             placeholder="Message"
+            required
             class="w-full p-3 bg-gray-100 border border-gray-300 rounded-md resize-none placeholder-gray-500 focus:outline-none focus:border-gray-400"></textarea>
-          <Button variant="submit">Send Message</Button>
+
+          <Button type="submit" variant="submit">
+            Send Message
+          </Button>
         </form>
 
         <div class="flex flex-col gap-6 space-y-10">
@@ -47,26 +64,7 @@ export function Contact(): JSX.Element {
               <h4 class="font-semibold text-lg text-textColors-primary">
                 Address
               </h4>
-              <p>Sleman, DI Yogyakarta</p>
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-7">
-            <div class="bg-backgroundColors-third w-14 h-14 rounded-xl flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                class="fill-current text-iconColors-primary">
-                <path d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z" />
-              </svg>
-            </div>
-            <div class="space-y-1">
-              <h4 class="font-semibold text-lg text-textColors-primary">
-                Phone
-              </h4>
-              <p>(0123)456789</p>
+              <p>Sleman, DI Yogyakarta, Indonesia</p>
             </div>
           </div>
 
@@ -89,6 +87,14 @@ export function Contact(): JSX.Element {
             </div>
           </div>
         </div>
+
+        {/* Pop-up Notifikasi */}
+        {showPopup() && (
+          <NotificationPopup
+            notification={notification()}
+            closePopup={() => setShowPopup(false)}
+          />
+        )}
       </div>
     </section>
   );
