@@ -77,7 +77,7 @@ export const educationData = [
   {
     title: "Tako.id",
     subtitle: "Front-end Developer",
-    years: "Agustus 2023 - Present",
+    years: "Agustus 2023 - Agustus 2024",
   },
 
   {
