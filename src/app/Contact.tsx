@@ -8,8 +8,33 @@ import "aos/dist/aos.css";
 export function Contact(): JSX.Element {
   const [showPopup, setShowPopup] = createSignal(false);
   const [notification, setNotification] = createSignal<string>("");
+  const [isFormInvalid, setIsFormInvalid] = createSignal(false);
 
   const handleSubmitForm = (event: Event) => {
+    event.preventDefault();
+
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const email = formData.get("email") as string;
+    const name = formData.get("name") as string;
+    const message = formData.get("message") as string;
+
+    if (!email.includes("@")) {
+      setNotification("Email harus mengandung '@'.");
+      setShowPopup(true);
+      setIsFormInvalid(true);
+      return;
+    }
+
+    if (!name || !email || !message) {
+      setNotification("Semua field harus diisi.");
+      setShowPopup(true);
+      setIsFormInvalid(true);
+      return;
+    }
+
+    setIsFormInvalid(false);
     handleFormUtils(event, setNotification, setShowPopup);
   };
 
@@ -54,7 +79,7 @@ export function Contact(): JSX.Element {
             class="w-full p-3 bg-gray-100 border border-gray-300 rounded-md resize-none placeholder-gray-500 focus:outline-none focus:border-gray-400"></textarea>
 
           <Button type="submit" variant="submit">
-            Send Message
+            {isFormInvalid() ? "Form Tidak Boleh Kosong" : "Send Message"}
           </Button>
         </form>
 
