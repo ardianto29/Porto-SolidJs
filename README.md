@@ -1,12 +1,22 @@
-## Usage
+## Description
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
-
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+this is my personal website that uses the solidJs framework
 
 ```bash
+$ git clone https://github.com/ardianto29/Porto-SolidJs.git
+
+cd Porto-SolidJs
+
 $ npm install # or pnpm install or yarn install
 ```
+
+## Tech-Stack
+
+- SolidJs
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lenis Scroll
 
 ### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
 
@@ -19,16 +29,10 @@ In the project directory, you can run:
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
 ## Deployment
 
 You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+
+## Display
+
+![](src/assets/images/screencapture-localhost-3000-2024-07-05-09_16_17.png)
