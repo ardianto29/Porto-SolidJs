@@ -118,34 +118,39 @@ export const portfolios = [
 
 export const educationData = [
   {
+    title: "Ichibot",
+    subtitle: "Web PHP Developer",
+    years: "September 2024 - Present"
+  },
+  {
     title: "Dicoding",
     subtitle: "Belajar Pemrograman Web dan Javascript",
-    years: "Mei 2024 - Juni 2024",
+    years: "Mei 2024 - Juni 2024"
   },
   {
     title: "Tako.id",
     subtitle: "Front-end Developer",
-    years: "Agustus 2023 - Agustus 2024",
+    years: "Agustus 2023 - Agustus 2024"
   },
 
   {
     title: "CodemasterID",
     subtitle: "Junior Mobile React Native",
-    years: "April 2023 - Agustus 2023",
+    years: "April 2023 - Agustus 2023"
   },
   {
     title: "BLKPP DIY",
     subtitle: "Embedded System",
-    years: "Jan 2023 - Maret 2023",
+    years: "Jan 2023 - Maret 2023"
   },
   {
     title: "PLN",
     subtitle: "PLN officer",
-    years: "2020 - 2021",
+    years: "2020 - 2021"
   },
   {
     title: "SMK Muhammadiyah 1 Padang",
     subtitle: "Rekayasa Perangkat Lunak",
-    years: "2017 - 2020",
-  },
+    years: "2017 - 2020"
+  }
 ];
