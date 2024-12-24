@@ -12,17 +12,17 @@
   "devDependencies": {
     "@types/aos": "^3.0.7",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.49",
     "solid-devtools": "^0.29.3",
-    "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vite-plugin-solid": "^2.10.2"
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vite-plugin-solid": "^2.11.0"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "aos": "^2.3.4",
-    "lenis": "^1.1.14",
+    "lenis": "^1.1.18",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.9.3",
     "solid-motionone": "^1.0.2",
