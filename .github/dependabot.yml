@@ -8,6 +8,3 @@ updates:
     commit-message: 
       prefix: "deps"
       include: scope
-    ignore:
-      - dependency-type: "vite"
-      version: ["<5.4.6"]
