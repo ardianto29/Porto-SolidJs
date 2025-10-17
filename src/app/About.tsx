@@ -55,7 +55,8 @@ export function About() {
   return (
     <section
       id="about"
-      class="relative min-h-screen flex items-center justify-center py-20 overflow-hidden bg-black">
+      class="relative min-h-screen flex items-center justify-center py-32 overflow-hidden bg-black"
+      style="margin-bottom: 0; padding-top: 2.5rem;">
       
       {/* Dynamic Background */}
       <div class="absolute inset-0">
@@ -110,8 +111,8 @@ export function About() {
       }`}>
         
         {/* Header Section */}
-        <div class="text-center mb-20">
-          <div class={`inline-flex items-center gap-4 mb-8 transition-all duration-1000 delay-200 ${
+        <div class="text-center mb-20 mt-8">
+          <div class={`inline-flex items-center gap-4 mb-10 transition-all duration-1000 delay-200 ${
             isVisible() ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}>
             <div class="w-16 h-px bg-gradient-to-r from-transparent via-purple-400 to-cyan-400"></div>
