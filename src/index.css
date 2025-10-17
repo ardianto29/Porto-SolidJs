@@ -14,6 +14,32 @@
 
 * {
   scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+/* Remove any default spacing */
+main, div {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure sections are seamless */
+#about, #portfolio {
+  margin: 0 !important;
+  padding: 0;
+  display: block;
 }
 
 html.lenis,
@@ -283,4 +309,32 @@ html.lenis body {
 
 .grid-cols-auto-fit-minmax {
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Additional scroll animation improvements */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Hardware acceleration for better performance */
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
