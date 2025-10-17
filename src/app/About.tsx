@@ -56,7 +56,7 @@ export function About() {
     <section
       id="about"
       class="relative min-h-screen flex items-center justify-center py-32 overflow-hidden bg-black"
-      style="margin-bottom: 0; padding-top: 2.5rem;">
+      style="margin-bottom: 0; padding-top: 2rem;">
       
       {/* Dynamic Background */}
       <div class="absolute inset-0">
