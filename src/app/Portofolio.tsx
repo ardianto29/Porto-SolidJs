@@ -148,23 +148,23 @@ export function Portfolios() {
       ref={sectionRef}
       id="portfolio" 
       class="relative bg-black"
-      style="height: 100vh; overflow: hidden;"
+      style="height: 100vh; overflow: hidden; padding-top: 80px;"
     >
       {/* Animated Background Elements */}
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="top: 80px;">
         <div class="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-float"></div>
         <div class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
       </div>
 
       {/* Floating Particles */}
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="top: 80px;">
         <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-sparkle"></div>
         <div class="absolute top-3/4 right-1/4 w-1 h-1 bg-white/30 rounded-full animate-sparkle" style="animation-delay: -1s;"></div>
         <div class="absolute top-1/2 left-3/4 w-3 h-3 bg-white/10 rounded-full animate-sparkle" style="animation-delay: -2s;"></div>
       </div>
 
       {/* Fixed Header Section */}
-      <div class="absolute top-0 left-0 right-0 z-50 py-6 bg-gradient-to-b from-black/95 to-transparent">
+      <div class="absolute left-0 right-0 z-50 py-6 bg-gradient-to-b from-black/95 to-transparent" style="top: 80px;">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center">
             <div 
@@ -189,7 +189,7 @@ export function Portfolios() {
       </div>
 
       {/* Scroll Cards Container */}
-      <div class="absolute top-0 left-0 w-full h-full flex items-center">
+      <div class="absolute left-0 w-full flex items-center" style="top: 80px; height: calc(100vh - 80px);">
         <div 
           ref={el => cardsContainerRef = el}
           class="flex gap-8 pl-6 mt-20"
