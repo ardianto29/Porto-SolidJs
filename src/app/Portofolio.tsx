@@ -1,116 +1,310 @@
 import { portfolios } from "../mapping/index";
 import { createSignal, For, onCleanup, onMount } from "solid-js";
-import { Motion } from "solid-motionone";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-onMount(() => {
-  AOS.init({
-    once: false,
-  });
-});
+gsap.registerPlugin(ScrollTrigger);
 
 export function Portfolios() {
-  const [scale, setScale] = createSignal(0.8);
-  const [opacity, setOpacity] = createSignal(0.6);
   const [hoveredIndex, setHoveredIndex] = createSignal<number | null>(null);
-  let ref: HTMLDivElement | undefined;
-
-  const handleScroll = () => {
-    if (!ref) return;
-    const rect = ref.getBoundingClientRect();
-    const scrollY = window.scrollY + window.innerHeight;
-    const targetHeight = window.innerHeight + ref.offsetHeight;
-
-    const scrollYProgress = (scrollY - rect.top) / targetHeight;
-    const newScale = 0.8 + scrollYProgress * 0.2;
-    const newOpacity = 0.6 + scrollYProgress * 0.4;
-
-    setScale(Math.min(1, Math.max(0.8, newScale)));
-    setOpacity(Math.min(1, Math.max(0.6, newOpacity)));
-  };
+  let sectionRef: HTMLElement | undefined;
+  let titleRef: HTMLHeadingElement | undefined;
+  let subtitleRef: HTMLDivElement | undefined;
+  let cardsContainerRef: HTMLDivElement | undefined;
+  let cardsRef: HTMLDivElement[] = [];
 
   onMount(() => {
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial call to set values
-    onCleanup(() => window.removeEventListener("scroll", handleScroll));
+    // Header animation
+    if (titleRef && subtitleRef) {
+      gsap.set([titleRef, subtitleRef], { opacity: 0, y: 30 });
+      
+      gsap.to([titleRef, subtitleRef], {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef,
+          start: "top 80%",
+          end: "top 50%",
+        }
+      });
+    }
+
+    // Horizontal scroll animation for cards
+    if (cardsContainerRef && cardsRef.length > 0) {
+      const totalWidth = cardsRef.length * 380; // Card width + gap
+      const scrollDistance = totalWidth - window.innerWidth;
+
+      // Set initial position
+      gsap.set(cardsContainerRef, { x: 0 });
+
+      // Create scroll-triggered horizontal animation
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef,
+          start: "top top",
+          end: () => `+=${scrollDistance + window.innerWidth}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+        }
+      });
+
+      // Animate horizontal scroll
+      tl.to(cardsContainerRef, {
+        x: -scrollDistance,
+        ease: "none",
+      });
+
+      // Individual card entrance animations
+      cardsRef.forEach((card, index) => {
+        gsap.fromTo(card, 
+          {
+            opacity: 0.6,
+            scale: 0.8,
+            y: 50
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.6,
+            delay: index * 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: sectionRef,
+              start: "top center",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      });
+    }
+
+    // Cleanup
+    onCleanup(() => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
+    });
   });
 
-  return (
-    <section id="portfolio" class="container mx-auto p-7">
-      <div
-        class="flex items-center justify-start pt-10"
-        data-aos="fade-right"
-        data-aos-once="false">
-        <div class="w-7 h-px bg-textColors-secondary mr-2 md:mr-4"></div>
-        <h3 class="font-normal tracking-[0.5rem] text-textColors-secondary uppercase">
-          My Works
-        </h3>
-      </div>
-      <h1
-        class="text-2xl md:text-3xl font-bold text-start text-textColors-primary mt-2"
-        data-aos="fade-right"
-        data-aos-once="false">
-        Featured Portfolios
-      </h1>
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+    
+    const element = cardsRef[index];
+    if (element) {
+      gsap.to(element, {
+        scale: 1.05,
+        rotateY: 5,
+        z: 50,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    }
 
-      <Motion.div
-        ref={(el) => (ref = el as HTMLDivElement)}
-        style={{ transform: `scale(${scale()})`, opacity: opacity() }}>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 ">
+    // Animate other cards to blur
+    cardsRef.forEach((card, i) => {
+      if (i !== index && card) {
+        gsap.to(card, {
+          filter: "blur(2px)",
+          scale: 0.95,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      }
+    });
+  };
+
+  const handleMouseLeave = (index: number) => {
+    setHoveredIndex(null);
+    
+    const element = cardsRef[index];
+    if (element) {
+      gsap.to(element, {
+        scale: 1,
+        rotateY: 0,
+        z: 0,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    }
+
+    // Reset all cards
+    cardsRef.forEach(card => {
+      if (card) {
+        gsap.to(card, {
+          filter: "blur(0px)",
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      }
+    });
+  };
+
+  return (
+    <section 
+      ref={sectionRef}
+      id="portfolio" 
+      class="relative bg-black"
+      style="height: 100vh; overflow: hidden;"
+    >
+      {/* Animated Background Elements */}
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+      </div>
+
+      {/* Floating Particles */}
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-sparkle"></div>
+        <div class="absolute top-3/4 right-1/4 w-1 h-1 bg-white/30 rounded-full animate-sparkle" style="animation-delay: -1s;"></div>
+        <div class="absolute top-1/2 left-3/4 w-3 h-3 bg-white/10 rounded-full animate-sparkle" style="animation-delay: -2s;"></div>
+      </div>
+
+      {/* Fixed Header Section */}
+      <div class="absolute top-0 left-0 right-0 z-50 py-6 bg-gradient-to-b from-black/95 to-transparent">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center">
+            <div 
+              ref={el => subtitleRef = el}
+              class="inline-flex items-center gap-3 mb-3"
+            >
+              <div class="w-12 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+              <span class="text-sm font-medium tracking-[0.2em] text-gray-300 uppercase">
+                Featured Works
+              </span>
+              <div class="w-12 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+            </div>
+            
+            <h1 
+              ref={el => titleRef = el}
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
+            >
+              Portfolios
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Cards Container */}
+      <div class="absolute top-0 left-0 w-full h-full flex items-center">
+        <div 
+          ref={el => cardsContainerRef = el}
+          class="flex gap-8 pl-6 mt-20"
+        >
           <For each={portfolios}>
             {(portfolio, index) => (
               <div
-                class={`relative rounded-xl overflow-hidden border border-solid border-borderColors mt-14 shadow-lg transition-all duration-200 transform ${
-                  hoveredIndex() !== null && hoveredIndex() !== index()
-                    ? "blur-sm"
-                    : "hover:scale-105"
-                }`}
-                onMouseEnter={() => setHoveredIndex(index())}
-                onMouseLeave={() => setHoveredIndex(null)}>
-                <div class="h-[250px] relative overflow-hidden">
-                  <img
-                    src={portfolio.image}
-                    alt={portfolio.title}
-                    class="w-full h-auto object-cover block"
-                  />
+                ref={el => cardsRef[index()] = el}
+                class="group relative flex-shrink-0 w-[320px]"
+                onMouseEnter={() => handleMouseEnter(index())}
+                onMouseLeave={() => handleMouseLeave(index())}
+                style="transform-style: preserve-3d; perspective: 1000px;"
+              >
+                {/* Card Number */}
+                <div class="absolute -top-6 left-0 z-30">
+                  <span class="text-4xl font-black bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent opacity-60">
+                    {String(index() + 1).padStart(2, '0')}
+                  </span>
                 </div>
-                <div class="p-5">
-                  <div class="flex justify-between items-center">
-                    <h4 class="font-medium text-base text-textColors-primary">
-                      {portfolio.title}
-                    </h4>
-                    <a
-                      href={portfolio.link}
-                      class="text-black group hover:text-iconColors-primary">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        class="fill-current">
-                        <path d="M6 17c2.269-9.881 11-11.667 11-11.667v-3.333l7 6.637-7 6.696v-3.333s-6.17-.171-11 5zm12 .145v2.855h-16v-12h6.598c.768-.787 1.561-1.449 2.339-2h-10.937v16h20v-6.769l-2 1.914z" />
-                      </svg>
-                    </a>
+
+                {/* Card Container */}
+                <div class="relative h-[380px] bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden">
+                  {/* Hover Glow Effect */}
+                  <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-red-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl"></div>
+                  
+                  {/* Image Container */}
+                  <div class="relative h-48 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent z-10"></div>
+                    <img
+                      src={portfolio.image}
+                      alt={portfolio.title}
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    
+                    {/* Overlay with Link */}
+                    <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <a
+                        href={portfolio.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
+                      >
+                        <span>View</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                      </a>
+                    </div>
                   </div>
-                  <div class="flex flex-wrap gap-4 mt-8">
-                    <For each={portfolio.tags}>
-                      {(tag) => (
-                        <div class="text-sm border border-solid border-gray-300 px-4 py-2 text-secondary max-w-full">
-                          {tag}
-                        </div>
+
+                  {/* Content */}
+                  <div class="p-4 relative h-[180px] flex flex-col justify-between">
+                    <div>
+                      <h3 class="text-lg font-bold text-white mb-3 group-hover:text-orange-400 transition-colors duration-300 line-clamp-2 leading-tight">
+                        {portfolio.title}
+                      </h3>
+                      
+                      <p class="text-gray-300 mb-4 leading-relaxed line-clamp-3 text-base">
+                        {portfolio.description}
+                      </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div class="flex flex-wrap gap-2">
+                      <For each={portfolio.tags.slice(0, 3)}>
+                        {(tag) => (
+                          <span class="px-3 py-1.5 text-sm font-medium bg-gradient-to-r from-gray-800/50 to-gray-700/50 border border-gray-600/30 text-gray-200 rounded-full backdrop-blur-sm">
+                            {tag}
+                          </span>
+                        )}
+                      </For>
+                      {portfolio.tags.length > 3 && (
+                        <span class="px-3 py-1.5 text-sm font-medium bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 text-orange-200 rounded-full backdrop-blur-sm">
+                          +{portfolio.tags.length - 3}
+                        </span>
                       )}
-                    </For>
+                    </div>
                   </div>
-                  <p class="text-lg text-textColors-secondary mt-7">
-                    {portfolio.description}
-                  </p>
+
+                  {/* Bottom Gradient Border */}
+                  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
                 </div>
               </div>
             )}
           </For>
+
+          {/* End spacer for smooth finish */}
+          <div class="flex-shrink-0 w-96 flex items-center justify-center">
+            <div class="text-center">
+              <div class="inline-flex flex-col items-center gap-4">
+                <p class="text-gray-400 text-lg font-medium">
+                  Like what you see?
+                </p>
+                <a
+                  href="#contact"
+                  class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25 hover:-translate-y-1"
+                >
+                  <span class="relative z-10">Let's Work Together</span>
+                  <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-      </Motion.div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-gray-400 text-center">
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-sm uppercase tracking-wider">Scroll to Explore</span>
+          <div class="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center">
+            <div class="w-1 h-3 bg-orange-500 rounded-full animate-bounce mt-2"></div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
