@@ -1,11 +1,11 @@
 import imagePorto1 from "../assets/images/screencapture-localhost-3000-2024-06-05-20_22_50.png";
 import imagePorto2 from "../assets/images/screencapture-tako-id-2024-06-25-19_41_33.png";
 import imagePorto3 from "../assets/images/screencapture-apple-clone-vite-six-vercel-app-2024-06-05-20_28_25.png";
-import imagePorto4 from "../assets/images/screencapture-bookappme-vercel-app-2024-06-25-02_38_51.png";
-import imagePorto5 from "../assets/images/screencapture-localhost-3000-2024-07-05-09_16_17.png";
-import imagePorto6 from "../assets/images/screencapture-scroll-millenium-vercel-app-2024-09-15-07_29_27.png";
-import imagePorto7 from "../assets/images/screencapture-keep-doc-vercel-app-2024-09-15-05_24_14.png";
-import imagePorto8 from "../assets/images/screencapture-roshidere-landing-page-vercel-app-2024-09-15-07_37_29.png";
+import imagePorto4 from "../assets/images/screencapture-scroll-millenium-vercel-app-2024-09-15-07_29_27.png";
+import imagePorto5 from "../assets/images/screencapture-keep-doc-vercel-app-2024-09-15-05_24_14.png";
+import imagePorto6 from "../assets/images/screencapture-ichibot-id-2025-10-25-12_00_14.png";
+import imagePorto7 from "../assets/images/screencapture-leaderboard-ichibot-id-2025-10-25-12_00_48.png";
+import imagePorto8 from "../assets/images/screencapture-iot-ichibot-id-2025-10-25-12_00_31.png";
 
 export const menu = [
   {
@@ -54,24 +54,9 @@ export const portfolios = [
     description:
       " This website is a clone of the Apple website, and I followed the tutorial from Youtube",
   },
-  {
-    image: imagePorto4,
-    title: "Aplikasi Web Sederhana mengelola data Buku",
-    link: "https://bookappme.vercel.app/",
-    tags: ["HTML", "CSS", "Javascript"],
-    description:
-      "Aplikasi ini untuk menyimpan buku dibangun dengan memanfaatkan Browser Object Model (BOM), Document Object Model (DOM), dan Event. Untuk Mencegah data tidak hilang dari aplikasi maka dimanfaatkan fungsi web storage dari web client agar aplikasi berjalan optimal.",
-  },
-  {
-    image: imagePorto5,
-    title: "Portfolio Website with Solidjs (Front-end)",
-    link: "https://my-porto-solid-js.vercel.app/",
-    tags: ["SolidJs", "Typescript", "Tailwindcss", "Framer Motion"],
-    description: "Personal Website",
-  },
 
   {
-    image: imagePorto6,
+    image: imagePorto4,
     title: "Scroll Millenium (Front-end)",
     link: "https://scroll-millenium.vercel.app",
     tags: [
@@ -86,7 +71,7 @@ export const portfolios = [
       "Build Landing Page Akademi Millenium game Blue Archive and Responsive",
   },
   {
-    image: imagePorto7,
+    image: imagePorto5,
     title: "KeepDoc (Full-stack)",
     link: "https://keep-doc.vercel.app",
     tags: [
@@ -101,19 +86,50 @@ export const portfolios = [
       "Built with Next.js to handle the user interface, Liveblocks for real-time features and styled with TailwindCSS, LiveDocs is a clone of Google Docs.",
   },
   {
-    image: imagePorto8,
-    title: "Landing Page Roshidere (Front-end)",
-    link: "https://roshidere-landing-page.vercel.app",
+    image: imagePorto6,
+    title: "Ichibot.id (Full-stack)",
+    link: "https://ichibot.id",
     tags: [
-      "React",
-      "Vite",
-      "Typescript",
+      "Laravel",
+      "PHP",
+      "MySQL",
       "Tailwindcss",
-      "Framer Motion",
-      "Lenis",
+      "AlpineJS",
     ],
-    description: "Build Landing Page Roshidere and Responsive",
+    description:
+      "A comprehensive robotics education and technology platform offering diverse services including robotics products, edutech courses for STEM learning, electronics components store, CNC laser cutting, 3D printing services, and custom IoT/embedded system project development. Built to inspire innovation and creativity in the digital era."
   },
+  {
+    image: imagePorto7,
+    title: "Ichibot.id Leaderboard (Full-stack)",
+    link: "https://leaderboard.ichibot.id",
+    tags: [
+      "Codeigniter4",
+      "PHP",
+      "MySQL",
+      "Tailwindcss",
+      "jQuery",
+    ],
+    description:
+      "Real-time competition leaderboard system for robotics tournaments and STEM challenges. Features live score updates, participant tracking, and dynamic ranking visualization to enhance competitive learning experiences."
+  },
+  {
+    image: imagePorto8,
+    title: "Ichibot.id IoT Dashboard (Full-stack)",
+    link: "https://iot.ichibot.id",
+    tags: [
+      "Laravel",
+      "ReactJS",
+      "Tailwindcss",
+      "PHP",
+      "MySQL",
+      "MQTT",
+      "InertiaJS",
+      "Ziggy",
+    ],
+    description:
+      "Advanced IoT monitoring and control dashboard for connected devices and automation systems. Integrates MQTT protocol for real-time data transmission, featuring interactive visualizations and remote device management capabilities built with modern Laravel-React stack."
+  }
 ];
 
 export const educationData = [
@@ -121,11 +137,6 @@ export const educationData = [
     title: "Ichibot",
     subtitle: "Web PHP Developer",
     years: "September 2024 - Present"
-  },
-  {
-    title: "Dicoding",
-    subtitle: "Belajar Pemrograman Web dan Javascript",
-    years: "Mei 2024 - Juni 2024"
   },
   {
     title: "Tako.id",
@@ -150,7 +161,7 @@ export const educationData = [
   },
   {
     title: "SMK Muhammadiyah 1 Padang",
-    subtitle: "Rekayasa Perangkat Lunak",
+    subtitle: "Software Engineering",
     years: "2017 - 2020"
   }
 ];
