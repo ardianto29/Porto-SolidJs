@@ -6,25 +6,21 @@ import { Skills } from "./Skills";
 import { Contact } from "./Contact";
 import { Footer } from "../components/Footer";
 import { ScrollUp } from "../components/ScrollUp";
+import useLenis from "../lib/useLenis";
 
 const App: Component = () => {
+  // Initialize Lenis for smooth scrolling
+  useLenis();
+
   return (
-    <main class="w-full overflow-hidden">
-      <div class="container mx-auto flex flex-col items-center">
-        <Header />
-        <section id="about">
-          <About />
-        </section>
-        <section id="portfolios">
-          <Portfolios />
-        </section>
-        <section id="skills">
-          <Skills />
-        </section>
-        <section id="contact">
-          <Contact />
-        </section>
-        <Footer />
+    <main class="w-full overflow-hidden" style="margin: 0; padding: 0;">
+      <Header />
+      <div class="w-full" style="margin: 0; padding: 0; display: block;">
+        <About />
+        <Portfolios />
+        {/* <Skills />
+        <Contact />
+        <Footer /> */}
       </div>
       <ScrollUp />
     </main>
