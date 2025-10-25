@@ -1,310 +1,496 @@
 import { portfolios } from "../mapping/index";
-import { createSignal, For, onCleanup, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface Portfolio {
+  image: string;
+  title: string;
+  link: string;
+  tags: string[];
+  description: string;
+}
+
 export function Portfolios() {
   const [hoveredIndex, setHoveredIndex] = createSignal<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = createSignal<string>("all");
+  const [selectedPortfolio, setSelectedPortfolio] = createSignal<Portfolio | null>(null);
+  const [isModalOpen, setIsModalOpen] = createSignal<boolean>(false);
+  
   let sectionRef: HTMLElement | undefined;
-  let titleRef: HTMLHeadingElement | undefined;
-  let subtitleRef: HTMLDivElement | undefined;
+  let headerRef: HTMLDivElement | undefined;
   let cardsContainerRef: HTMLDivElement | undefined;
-  let cardsRef: HTMLDivElement[] = [];
+  let cardRefs: HTMLDivElement[] = [];
+  let modalRef: HTMLDivElement | undefined;
+  let modalContentRef: HTMLDivElement | undefined;
+
+  const categories = ["all", "web", "fullstack", "frontend"];
+
+  const filteredPortfolios = () => {
+    const category = selectedCategory();
+    if (category === "all") return portfolios;
+    return portfolios.filter(p => 
+      p.tags.some(tag => tag.toLowerCase().includes(category))
+    );
+  };
+
+  const openModal = (portfolio: Portfolio) => {
+    setSelectedPortfolio(portfolio);
+    setIsModalOpen(true);
+    
+    // Lock body scroll completely
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    // Let Lenis know we are interacting with an inner scroll area (modal)
+    // so wheel events should not be hijacked by the smooth scroller.
+    document.documentElement.setAttribute('data-lenis-prevent', '');
+
+    // Animate modal entrance
+    if (modalRef && modalContentRef) {
+      gsap.set(modalRef, { opacity: 0, display: 'flex' });
+      gsap.set(modalContentRef, { scale: 0.8, y: 50, opacity: 0 });
+      
+      const tl = gsap.timeline();
+      tl.to(modalRef, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out"
+      })
+      .to(modalContentRef, {
+        scale: 1,
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "back.out(1.5)"
+      }, "-=0.1");
+    }
+  };
+
+  const closeModal = () => {
+    if (modalRef && modalContentRef) {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsModalOpen(false);
+          setSelectedPortfolio(null);
+          
+          // Restore body scroll
+          const scrollY = document.body.style.top;
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.style.overflow = '';
+          document.documentElement.removeAttribute('data-lenis-prevent');
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
+      });
+      
+      tl.to(modalContentRef, {
+        scale: 0.8,
+        y: 50,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in"
+      })
+      .to(modalRef, {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in"
+      }, "-=0.1")
+      .set(modalRef, { display: 'none' });
+    }
+  };
 
   onMount(() => {
-    // Header animation
-    if (titleRef && subtitleRef) {
-      gsap.set([titleRef, subtitleRef], { opacity: 0, y: 30 });
-      
-      gsap.to([titleRef, subtitleRef], {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out",
+    // Header Animation
+    if (headerRef) {
+      gsap.from(headerRef.children, {
         scrollTrigger: {
           trigger: sectionRef,
           start: "top 80%",
-          end: "top 50%",
-        }
+        },
+        opacity: 0,
+        y: 40,
+        stagger: 0.15,
+        duration: 1,
+        ease: "power3.out"
       });
     }
 
-    // Horizontal scroll animation for cards
-    if (cardsContainerRef && cardsRef.length > 0) {
-      const totalWidth = cardsRef.length * 380; // Card width + gap
-      const scrollDistance = totalWidth - window.innerWidth;
-
-      // Set initial position
-      gsap.set(cardsContainerRef, { x: 0 });
-
-      // Create scroll-triggered horizontal animation
-      let tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef,
-          start: "top top",
-          end: () => `+=${scrollDistance + window.innerWidth}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        }
-      });
-
-      // Animate horizontal scroll
-      tl.to(cardsContainerRef, {
-        x: -scrollDistance,
-        ease: "none",
-      });
-
-      // Individual card entrance animations
-      cardsRef.forEach((card, index) => {
-        gsap.fromTo(card, 
-          {
-            opacity: 0.6,
-            scale: 0.8,
-            y: 50
+    // Cards Animation - Optimized for performance
+    cardRefs.forEach((card, index) => {
+      if (card) {
+        const delay = index * 0.08;
+        
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            once: true, // Only animate once for better performance
           },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.6,
-            delay: index * 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef,
-              start: "top center",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      });
-    }
+          opacity: 0,
+          y: 40,
+          duration: 0.6,
+          delay: delay,
+          ease: "power2.out"
+        });
+
+        // Remove parallax effect for better performance on low-end devices
+      }
+    });
+
+    // Keyboard support for modal
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen()) {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
 
     // Cleanup
     onCleanup(() => {
       ScrollTrigger.getAll().forEach(st => st.kill());
+      window.removeEventListener('keydown', handleKeyDown);
     });
   });
 
-  const handleMouseEnter = (index: number) => {
-    setHoveredIndex(index);
-    
-    const element = cardsRef[index];
-    if (element) {
-      gsap.to(element, {
-        scale: 1.05,
-        rotateY: 5,
-        z: 50,
-        duration: 0.4,
+  const handleCardHover = (index: number, isEntering: boolean) => {
+    const card = cardRefs[index];
+    if (!card) return;
+
+    if (isEntering) {
+      setHoveredIndex(index);
+      // Simplified hover animation
+      gsap.to(card, {
+        y: -8,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    } else {
+      setHoveredIndex(null);
+      gsap.to(card, {
+        y: 0,
+        duration: 0.3,
         ease: "power2.out"
       });
     }
-
-    // Animate other cards to blur
-    cardsRef.forEach((card, i) => {
-      if (i !== index && card) {
-        gsap.to(card, {
-          filter: "blur(2px)",
-          scale: 0.95,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      }
-    });
-  };
-
-  const handleMouseLeave = (index: number) => {
-    setHoveredIndex(null);
-    
-    const element = cardsRef[index];
-    if (element) {
-      gsap.to(element, {
-        scale: 1,
-        rotateY: 0,
-        z: 0,
-        duration: 0.4,
-        ease: "power2.out"
-      });
-    }
-
-    // Reset all cards
-    cardsRef.forEach(card => {
-      if (card) {
-        gsap.to(card, {
-          filter: "blur(0px)",
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      }
-    });
   };
 
   return (
     <section 
       ref={sectionRef}
       id="portfolio" 
-      class="relative bg-black"
-      style="height: 100vh; overflow: hidden; padding-top: 80px;"
+      class="relative bg-gradient-to-b from-black via-gray-950 to-black min-h-screen overflow-hidden"
     >
-      {/* Animated Background Elements */}
-      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="top: 80px;">
-        <div class="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+      {/* Minimalist Background */}
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Subtle gradient orbs */}
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        
+        {/* Grid lines - very subtle */}
+        <div 
+          class="absolute inset-0 opacity-[0.02]" 
+          style="background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px); background-size: 100px 100px;"
+        ></div>
       </div>
 
-      {/* Floating Particles */}
-      <div class="absolute inset-0 overflow-hidden pointer-events-none" style="top: 80px;">
-        <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-sparkle"></div>
-        <div class="absolute top-3/4 right-1/4 w-1 h-1 bg-white/30 rounded-full animate-sparkle" style="animation-delay: -1s;"></div>
-        <div class="absolute top-1/2 left-3/4 w-3 h-3 bg-white/10 rounded-full animate-sparkle" style="animation-delay: -2s;"></div>
-      </div>
+      {/* Spacer untuk menurunkan konten */}
+      <div class="h-20"></div>
 
-      {/* Fixed Header Section */}
-      <div class="absolute left-0 right-0 z-50 py-6 bg-gradient-to-b from-black/95 to-transparent" style="top: 80px;">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="text-center">
-            <div 
-              ref={el => subtitleRef = el}
-              class="inline-flex items-center gap-3 mb-3"
-            >
-              <div class="w-12 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
-              <span class="text-sm font-medium tracking-[0.2em] text-gray-300 uppercase">
-                Featured Works
-              </span>
-              <div class="w-12 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+      <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+        {/* Modern Header */}
+        <div ref={headerRef} class="mb-20">
+          {/* Small tag */}
+          <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20">
+            <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+            <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest">My Work</span>
+          </div>
+
+          {/* Title */}
+          <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white">
+            Selected <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-600">Projects</span>
+          </h1>
+
+          {/* Description */}
+          <p class="text-xl text-gray-400 max-w-2xl leading-relaxed">
+            A showcase of creative solutions and technical excellence
+          </p>
+
+          {/* Stats - Minimalist */}
+          <div class="flex gap-12 mt-12">
+            <div>
+              <div class="text-4xl font-bold text-white mb-1">8+</div>
+              <div class="text-sm text-gray-500 uppercase tracking-wider">Projects</div>
             </div>
-            
-            <h1 
-              ref={el => titleRef = el}
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
-            >
-              Portfolios
-            </h1>
+            <div>
+              <div class="text-4xl font-bold text-white mb-1">5+</div>
+              <div class="text-sm text-gray-500 uppercase tracking-wider">Tech Stack</div>
+            </div>
+            <div>
+              <div class="text-4xl font-bold text-white mb-1">100%</div>
+              <div class="text-sm text-gray-500 uppercase tracking-wider">Quality</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Scroll Cards Container */}
-      <div class="absolute left-0 w-full flex items-center" style="top: 80px; height: calc(100vh - 80px);">
+        {/* Masonry Grid Layout */}
         <div 
-          ref={el => cardsContainerRef = el}
-          class="flex gap-8 pl-6 mt-20"
+          ref={cardsContainerRef}
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          <For each={portfolios}>
+          <For each={filteredPortfolios()}>
             {(portfolio, index) => (
               <div
-                ref={el => cardsRef[index()] = el}
-                class="group relative flex-shrink-0 w-[320px]"
-                onMouseEnter={() => handleMouseEnter(index())}
-                onMouseLeave={() => handleMouseLeave(index())}
-                style="transform-style: preserve-3d; perspective: 1000px;"
+                ref={el => cardRefs[index()] = el}
+                class="group relative cursor-pointer"
+                onMouseEnter={() => handleCardHover(index(), true)}
+                onMouseLeave={() => handleCardHover(index(), false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openModal(portfolio);
+                }}
               >
-                {/* Card Number */}
-                <div class="absolute -top-6 left-0 z-30">
-                  <span class="text-4xl font-black bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent opacity-60">
-                    {String(index() + 1).padStart(2, '0')}
-                  </span>
-                </div>
-
-                {/* Card Container */}
-                <div class="relative h-[380px] bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden">
-                  {/* Hover Glow Effect */}
-                  <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-red-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl"></div>
-                  
-                  {/* Image Container */}
-                  <div class="relative h-48 overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent z-10"></div>
+                {/* Card */}
+                <div class="relative h-full bg-gray-900/80 border border-gray-800 rounded-2xl overflow-hidden transition-all duration-300 hover:border-gray-700 will-change-transform">
+                  {/* Image */}
+                  <div class="relative h-64 overflow-hidden bg-gray-800">
                     <img
                       src={portfolio.image}
                       alt={portfolio.title}
-                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                     
-                    {/* Overlay with Link */}
-                    <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    {/* Gradient overlay */}
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+                    
+                    {/* Number badge */}
+                    <div class="absolute top-4 right-4">
+                      <div class="w-10 h-10 rounded-full bg-orange-500/30 border border-orange-500/40 flex items-center justify-center">
+                        <span class="text-sm font-bold text-orange-400">{String(index() + 1).padStart(2, '0')}</span>
+                      </div>
+                    </div>
+
+                    {/* Hover overlay */}
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/70">
                       <a
                         href={portfolio.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
+                        class="px-6 py-3 bg-white/15 border border-white/20 rounded-full text-white font-medium hover:bg-white/25 transition-all duration-300 flex items-center gap-2"
                       >
-                        <span>View</span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        <span>View Project</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
                       </a>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div class="p-4 relative h-[180px] flex flex-col justify-between">
-                    <div>
-                      <h3 class="text-lg font-bold text-white mb-3 group-hover:text-orange-400 transition-colors duration-300 line-clamp-2 leading-tight">
-                        {portfolio.title}
-                      </h3>
-                      
-                      <p class="text-gray-300 mb-4 leading-relaxed line-clamp-3 text-base">
-                        {portfolio.description}
-                      </p>
-                    </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2 line-clamp-2">
+                      {portfolio.title}
+                    </h3>
+                    
+                    <p class="text-gray-400 text-sm mb-4 line-clamp-2">
+                      {portfolio.description}
+                    </p>
 
                     {/* Tags */}
                     <div class="flex flex-wrap gap-2">
                       <For each={portfolio.tags.slice(0, 3)}>
                         {(tag) => (
-                          <span class="px-3 py-1.5 text-sm font-medium bg-gradient-to-r from-gray-800/50 to-gray-700/50 border border-gray-600/30 text-gray-200 rounded-full backdrop-blur-sm">
+                          <span class="px-3 py-1 text-xs font-medium bg-gray-800/50 border border-gray-700/50 text-gray-300 rounded-full">
                             {tag}
                           </span>
                         )}
                       </For>
                       {portfolio.tags.length > 3 && (
-                        <span class="px-3 py-1.5 text-sm font-medium bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 text-orange-200 rounded-full backdrop-blur-sm">
+                        <span class="px-3 py-1 text-xs font-medium bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-full">
                           +{portfolio.tags.length - 3}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Bottom Gradient Border */}
-                  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
+                  {/* Bottom accent */}
+                  <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                 </div>
               </div>
             )}
           </For>
+        </div>
+      </div>
 
-          {/* End spacer for smooth finish */}
-          <div class="flex-shrink-0 w-96 flex items-center justify-center">
-            <div class="text-center">
-              <div class="inline-flex flex-col items-center gap-4">
-                <p class="text-gray-400 text-lg font-medium">
-                  Like what you see?
-                </p>
-                <a
-                  href="#contact"
-                  class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25 hover:-translate-y-1"
-                >
-                  <span class="relative z-10">Let's Work Together</span>
-                  <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </a>
-              </div>
+      {/* Modal */}
+      <Show when={isModalOpen()}>
+        <div
+          ref={modalRef}
+          class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
+          style="display: none;"
+          onWheel={(e) => {
+            // Allow wheel scrolling inside the modal content but prevent it on the dark overlay.
+            // This avoids the background page from scrolling while keeping native scroll inside the modal.
+            const target = e.target as Node;
+            const insideContent = modalContentRef && modalContentRef.contains(target);
+            if (!insideContent) {
+              e.preventDefault();
+            }
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeModal();
+          }}
+        >
+          <div 
+            class="absolute inset-0 flex items-center justify-center p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) closeModal();
+            }}
+          >
+            <div
+              ref={modalContentRef}
+              class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 via-gray-900 to-black border border-gray-800 rounded-3xl shadow-2xl"
+              data-lenis-prevent
+            >
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              class="absolute top-6 right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 transition-all duration-300 group"
+            >
+              <svg class="w-6 h-6 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+
+            <Show when={selectedPortfolio()}>
+              {(portfolio) => (
+                <>
+                  {/* Image Section */}
+                  <div class="relative h-96 overflow-hidden rounded-t-3xl bg-gray-800">
+                    <img
+                      src={portfolio().image}
+                      alt={portfolio().title}
+                      class="w-full h-full object-cover"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                    
+                    {/* Title Overlay */}
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                      <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        {portfolio().title}
+                      </h2>
+                      <a
+                        href={portfolio().link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-orange-500/50 transition-all duration-300"
+                      >
+                        <span>Visit Project</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div class="p-8 md:p-12">
+                    {/* Description */}
+                    <div class="mb-8">
+                      <h3 class="text-xl font-semibold text-orange-400 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Project Description
+                      </h3>
+                      <p class="text-gray-300 leading-relaxed text-lg">
+                        {portfolio().description}
+                      </p>
+                    </div>
+
+                    {/* Technologies */}
+                    <div>
+                      <h3 class="text-xl font-semibold text-orange-400 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                        Technologies Used
+                      </h3>
+                      <div class="flex flex-wrap gap-3">
+                        <For each={portfolio().tags}>
+                          {(tag) => (
+                            <span class="px-4 py-2 bg-gray-800/80 border border-gray-700 rounded-full text-gray-300 text-sm font-medium hover:border-orange-500/50 hover:text-orange-400 transition-all duration-300">
+                              {tag}
+                            </span>
+                          )}
+                        </For>
+                      </div>
+                    </div>
+
+                    {/* Additional spacing */}
+                    <div class="mt-8 pt-8 border-t border-gray-800">
+                      <p class="text-center text-gray-500 text-sm">
+                        Click outside or press ESC to close
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </Show>
             </div>
           </div>
         </div>
-      </div>
+      </Show>
 
-      {/* Scroll Indicator */}
-      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-gray-400 text-center">
-        <div class="flex flex-col items-center gap-2">
-          <span class="text-sm uppercase tracking-wider">Scroll to Explore</span>
-          <div class="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center">
-            <div class="w-1 h-3 bg-orange-500 rounded-full animate-bounce mt-2"></div>
-          </div>
-        </div>
-      </div>
+      {/* Performance optimization styles */}
+      <style>{`
+        /* GPU acceleration for smooth animations */
+        .group {
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+
+        /* Reduce backdrop-blur on low-end devices */
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+          
+          .backdrop-blur-sm,
+          .backdrop-blur-md {
+            backdrop-filter: none !important;
+          }
+        }
+
+        /* Optimize images */
+        img {
+          content-visibility: auto;
+          contain-intrinsic-size: 256px;
+        }
+
+        /* Reduce blur effects on mobile */
+        @media (max-width: 768px) {
+          .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+          }
+          .backdrop-blur-md {
+            backdrop-filter: blur(6px);
+          }
+          .blur-3xl {
+            filter: blur(40px);
+          }
+        }
+      `}</style>
     </section>
   );
 }
