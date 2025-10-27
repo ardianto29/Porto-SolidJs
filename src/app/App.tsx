@@ -18,9 +18,9 @@ const App: Component = () => {
       <div class="w-full" style="margin: 0; padding: 0; display: block;">
         <About />
         <Portfolios />
-        {/* <Skills />
+        <Skills />
         <Contact />
-        <Footer /> */}
+        <Footer />
       </div>
       <ScrollUp />
     </main>
