@@ -394,3 +394,66 @@ html.lenis body {
   filter: blur(20px);
   z-index: -1;
 }
+
+/* Contact Section Styling */
+.contact-backdrop {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(126, 116, 241, 0.1);
+}
+
+.floating-animation {
+  animation: floating 6s ease-in-out infinite;
+}
+
+.floating-animation-delayed {
+  animation: floating 8s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced shadow utilities */
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(126, 116, 241, 0.3);
+}
+
+.shadow-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(126, 116, 241, 0.5);
+}
+
+/* Smooth gradient animations */
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
