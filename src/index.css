@@ -338,3 +338,59 @@ html.lenis body {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+
+/* SplitType animation styles */
+.word {
+  display: inline-block;
+  white-space: pre;
+}
+
+.line {
+  display: block;
+  overflow: hidden;
+}
+
+.char {
+  display: inline-block;
+}
+
+/* Hide native scrollbars but keep scrolling functional */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Line clamp utilities for consistent text overflow */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Technical Skills Styling */
+.skill-card {
+  perspective: 1000px;
+}
+
+.skill-card-inner {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.skill-glow {
+  filter: blur(20px);
+  z-index: -1;
+}
